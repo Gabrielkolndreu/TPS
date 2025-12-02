@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Stella</title>
+</head>
+<body>
+
+<canvas id="c" width="600" height="600"></canvas>
+
+<script>
+const ctx = document.getElementById("c").getContext("2d");
+
+ctx.beginPath();
+ctx.arc(300, 300, 250, 0, Math.PI * 2);
+ctx.fillStyle = "gold";
+ctx.fill();
+ctx.strokeStyle = "darkorange";
+ctx.stroke();
+
+ctx.beginPath();
+ctx.moveTo(300, 70);
+ctx.lineTo(350, 200);
+ctx.lineTo(490, 200);
+ctx.lineTo(375, 275);
+ctx.lineTo(410, 410);
+ctx.lineTo(300, 340);
+ctx.lineTo(190, 410);
+ctx.lineTo(225, 275);
+ctx.lineTo(110, 200);
+ctx.lineTo(250, 200);
+ctx.closePath();
+ctx.fillStyle = "cyan";
+ctx.fill();
+ctx.strokeStyle = "white";
+ctx.lineWidth = 3;
+ctx.stroke();
+</script>
+
+</body>
+</html>
