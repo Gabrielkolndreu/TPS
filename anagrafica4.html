@@ -124,24 +124,24 @@
 <body>
     <h2>Anagrafica Completa</h2>
 
-    <label>Nome: <input type="text" id="nome" placeholder="Nome"></label><br>
-    <label>Cognome: <input type="text" id="cognome" placeholder="Cognome"></label><br>
-    <label>Indirizzo: <input type="text" id="indirizzo" placeholder="Indirizzo"></label><br>
-    <label>Città: <input type="text" id="citta" placeholder="Città"></label><br><br>
+    <label>Nome: <input type="text" id="nome" value="gabriel"></label><br>
+    <label>Cognome: <input type="text" id="cognome" value="kolndreu"></label><br>
+    <label>Indirizzo: <input type="text" id="indirizzo" value="Via mozart 14"></label><br>
+    <label>Città: <input type="text" id="citta" value="Bollate"></label><br><br>
 
     <h3>Sesso:</h3>
-    <input type="radio" name="sesso" value="Maschio"> Maschio<br>
+    <input type="radio" name="sesso" value="Maschio" checked> Maschio<br>
     <input type="radio" name="sesso" value="Femmina"> Femmina<br>
     <input type="radio" name="sesso" value="Altro"> Altro<br><br>
 
     <h3>Diplomi posseduti:</h3>
     <input type="checkbox" name="diploma" value="Nessun titolo"> Nessun titolo<br>
-    <input type="checkbox" name="diploma" value="Laurea"> Laurea<br>
+    <input type="checkbox" name="diploma" value="Laurea" checked> Laurea<br>
     <input type="checkbox" name="diploma" value="Master"> Master<br><br>
 
     <h3>Sport praticati:</h3>
     <select id="sport" multiple size="4">
-        <option value="Calcio">Calcio</option>
+        <option value="Calcio" selected>Calcio</option>
         <option value="Basket">Basket</option>
         <option value="Palestra">Palestra</option>
         <option value="Nuoto">Nuoto</option>
