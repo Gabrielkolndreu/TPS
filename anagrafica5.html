@@ -32,7 +32,7 @@
     </style>
 
     <script>
-
+let elenco =[];
         function aggiungi() {
 
             let nome = document.getElementById("nome").value.trim();
@@ -60,7 +60,7 @@
                 return;
             }
 
-            if (!regexCap.test(cap)) {
+            if (!regexCAP.test(cap)) {
                 alert("CAP non valido (deve contenere 5 numeri)");
                 return;
             }
@@ -113,7 +113,7 @@
                 sport: sportSel
             };
 
-            let elenco = JSON.parse(localStorage.getItem("anagrafica"));
+            elenco = JSON.parse(localStorage.getItem("anagrafica"));
             elenco.push(persona);
             localStorage.setItem("anagrafica", JSON.stringify(elenco));
 
