@@ -1,103 +1,211 @@
-let elenco = [];
+<!DOCTYPE html>
+<html lang="it">
 
-function aggiungi() {
+<head>
+    <meta charset="UTF-8">
+    <title>Anagrafica Completa</title>
 
-    let nome = document.getElementById("nome").value.trim();
-    let cognome = document.getElementById("cognome").value.trim();
-    let indirizzo = document.getElementById("indirizzo").value.trim();
-    let cap = document.getElementById("cap").value.trim();
-    let citta = document.getElementById("citta").value.trim();
-    let email = document.getElementById("email").value.trim();
-    let telefono = document.getElementById("telefono").value.trim();
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 30px;
+        }
 
-    let regexNome = /^[A-Za-z]+$/;
-    let regexCognome = /^[A-Za-z]+$/;
-    let regexCAP = /^[0-9]{5}$/;
-    let regexCitta = /^[A-Za-z\s]+$/;
-    let regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    let regexTelefono = /^[0-9]{8,15}$/;
+        table {
+            border-collapse: collapse;
+            margin-top: 20px;
+            width: 95%;
+        }
 
-    if (!regexNome.test(nome)) return alert("Nome non valido");
-    if (!regexCognome.test(cognome)) return alert("Cognome non valido");
-    if (!regexCAP.test(cap)) return alert("CAP non valido");
-    if (!regexCitta.test(citta)) return alert("Città non valida");
-    if (!regexEmail.test(email)) return alert("Email non valida");
-    if (!regexTelefono.test(telefono)) return alert("Telefono non valido");
+        th, td {
+            border: 1px solid #444;
+            padding: 8px 12px;
+        }
 
-    let sesso = "Non selezionato";
-    let radio = document.getElementsByName("sesso");
-    for (let r of radio) {
-        if (r.checked) sesso = r.value;
-    }
+        th {
+            background-color: #eee;
+        }
 
-    let diplomi = [];
-    let checkbox = document.getElementsByName("diploma");
-    for (let c of checkbox) {
-        if (c.checked) diplomi.push(c.value);
-    }
-    if (diplomi.length === 0) diplomi = ["Nessuno"];
+        input, select {
+            margin: 5px;
+        }
+    </style>
 
-    let sportSel = [];
-    let select = document.getElementById("sport").options;
-    for (let s of select) {
-        if (s.selected) sportSel.push(s.value);
-    }
-    if (sportSel.length === 0) sportSel = ["Nessuno"];
+    <script>
+        let elenco = [];
 
-    let persona = {
-        nome, cognome, indirizzo, cap, citta,
-        email, telefono, sesso, diplomi, sport: sportSel
-    };
+        function aggiungi() {
 
-    elenco = JSON.parse(localStorage.getItem("anagrafica")) || [];
+            let nome = document.getElementById("nome").value.trim();
+            let cognome = document.getElementById("cognome").value.trim();
+            let indirizzo = document.getElementById("indirizzo").value.trim();
+            let cap = document.getElementById("cap").value.trim();
+            let citta = document.getElementById("citta").value.trim();
+            let email = document.getElementById("email").value.trim();
+            let telefono = document.getElementById("telefono").value.trim();
 
-    elenco.push(persona);
-    localStorage.setItem("anagrafica", JSON.stringify(elenco));
+            let regexNome = /^[A-Za-z]+$/;
+            let regexCognome = /^[A-Za-z]+$/;
+            let regexCAP = /^[0-9]{5}$/;
+            let regexCitta = /^[A-Za-z\s]+$/;
+            let regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            let regexTelefono = /^[0-9]{8,15}$/;
 
-    aggiornaTabella();
-    document.getElementById("form").reset();
-}
+            if (!regexNome.test(nome)) {
+                alert("Nome non valido (solo lettere)");
+                return;
+            }
 
-function eliminaUltima() {
-    let elenco = JSON.parse(localStorage.getItem("anagrafica")) || [];
+            if (!regexCognome.test(cognome)) {
+                alert("Cognome non valido (solo lettere)");
+                return;
+            }
 
-    if (elenco.length > 0) {
-        elenco.pop();
-        localStorage.setItem("anagrafica", JSON.stringify(elenco));
-        aggiornaTabella();
-    } else {
-        alert("Nessun dato da eliminare");
-    }
-}
+            if (!regexCAP.test(cap)) {
+                alert("CAP non valido (deve contenere 5 numeri)");
+                return;
+            }
 
-function aggiornaTabella() {
-    let elenco = JSON.parse(localStorage.getItem("anagrafica")) || [];
+            if (!regexCitta.test(citta)) {
+                alert("Città non valida (solo lettere e spazi)");
+                return;
+            }
 
-    if (elenco.length === 0) {
-        document.getElementById("risultato").innerHTML = "<p>Nessun dato presente</p>";
-        return;
-    }
+            if (!regexEmail.test(email)) {
+                alert("Email non valida");
+                return;
+            }
 
-    let tab = "<table>";
-    tab += "<tr><th>Nome</th><th>Cognome</th><th>Indirizzo</th><th>CAP</th><th>Città</th><th>Email</th><th>Telefono</th><th>Sesso</th><th>Diplomi</th><th>Sport</th></tr>";
+            if (!regexTelefono.test(telefono)) {
+                alert("Telefono non valido (solo numeri, 8-15 cifre)");
+                return;
+            }
 
-    for (let p of elenco) {
-        tab += `<tr>
-            <td>${p.nome}</td>
-            <td>${p.cognome}</td>
-            <td>${p.indirizzo}</td>
-            <td>${p.cap}</td>
-            <td>${p.citta}</td>
-            <td>${p.email}</td>
-            <td>${p.telefono}</td>
-            <td>${p.sesso}</td>
-            <td>${p.diplomi.join(", ")}</td>
-            <td>${p.sport.join(", ")}</td>
-        </tr>`;
-    }
+            let sesso = "Non selezionato";
+            let radio = document.getElementsByName("sesso");
+            for (let i = 0; i < radio.length; i++) {
+                if (radio[i].checked) sesso = radio[i].value;
+            }
 
-    tab += "</table>";
-    document.getElementById("risultato").innerHTML = tab;
-}
+            let checkbox = document.getElementsByName("diploma");
+            let diplomi = [];
+            for (let i = 0; i < checkbox.length; i++) {
+                if (checkbox[i].checked) diplomi.push(checkbox[i].value);
+            }
+            if (diplomi.length === 0) diplomi = ["Nessuno"];
 
-window.onload = aggiornaTabella;
+            let select = document.getElementById("sport").options;
+            let sportSel = [];
+            for (let i = 0; i < select.length; i++) {
+                if (select[i].selected) sportSel.push(select[i].value);
+            }
+            if (sportSel.length === 0) sportSel = ["Nessuno"];
+
+            let persona = {
+                nome,
+                cognome,
+                indirizzo,
+                cap,
+                citta,
+                email,
+                telefono,
+                sesso,
+                diplomi,
+                sport: sportSel
+            };
+
+            elenco = JSON.parse(localStorage.getItem("anagrafica")) || [];
+
+            elenco.push(persona);
+            localStorage.setItem("anagrafica", JSON.stringify(elenco));
+
+            aggiornaTabella();
+            document.getElementById("form").reset();
+        }
+
+        function eliminaUltima() {
+            let elenco = JSON.parse(localStorage.getItem("anagrafica")) || [];
+
+            if (elenco.length > 0) {
+                elenco.pop();
+                localStorage.setItem("anagrafica", JSON.stringify(elenco));
+                aggiornaTabella();
+            } else {
+                alert("Non ci sono righe da eliminare!");
+            }
+        }
+
+        function aggiornaTabella() {
+            let elenco = JSON.parse(localStorage.getItem("anagrafica")) || [];
+
+            let tab = "<table>";
+            tab += "<tr><th>Nome</th><th>Cognome</th><th>Indirizzo</th><th>CAP</th><th>Città</th><th>Email</th><th>Telefono</th><th>Sesso</th><th>Diplomi</th><th>Sport</th></tr>";
+
+            for (let p of elenco) {
+                tab += "<tr>" +
+                    "<td>" + p.nome + "</td>" +
+                    "<td>" + p.cognome + "</td>" +
+                    "<td>" + p.indirizzo + "</td>" +
+                    "<td>" + p.cap + "</td>" +
+                    "<td>" + p.citta + "</td>" +
+                    "<td>" + p.email + "</td>" +
+                    "<td>" + p.telefono + "</td>" +
+                    "<td>" + p.sesso + "</td>" +
+                    "<td>" + p.diplomi.join(", ") + "</td>" +
+                    "<td>" + p.sport.join(", ") + "</td>" +
+                    "</tr>";
+            }
+
+            tab += "</table>";
+            document.getElementById("risultato").innerHTML = tab;
+        }
+
+        window.onload = aggiornaTabella;
+
+    </script>
+</head>
+
+<body>
+
+    <h2>Anagrafica Completa con Controllo Regex</h2>
+
+    <form id="form">
+
+        <label>Nome: <input type="text" id="nome"></label><br>
+        <label>Cognome: <input type="text" id="cognome"></label><br>
+        <label>Indirizzo: <input type="text" id="indirizzo"></label><br>
+        <label>CAP: <input type="text" id="cap"></label><br>
+        <label>Città: <input type="text" id="citta"></label><br>
+        <label>Email: <input type="text" id="email"></label><br>
+        <label>Telefono: <input type="text" id="telefono"></label><br><br>
+
+        <h3>Sesso:</h3>
+        <input type="radio" name="sesso" value="Maschio"> Maschio<br>
+        <input type="radio" name="sesso" value="Femmina"> Femmina<br>
+        <input type="radio" name="sesso" value="Altro"> Altro<br><br>
+
+        <h3>Diplomi posseduti:</h3>
+        <input type="checkbox" name="diploma" value="Nessun titolo"> Nessun titolo<br>
+        <input type="checkbox" name="diploma" value="Laurea"> Laurea<br>
+        <input type="checkbox" name="diploma" value="Master"> Master<br><br>
+
+        <h3>Sport praticati:</h3>
+        <select id="sport" multiple size="4">
+            <option value="Calcio">Calcio</option>
+            <option value="Basket">Basket</option>
+            <option value="Palestra">Palestra</option>
+            <option value="Nuoto">Nuoto</option>
+        </select><br><br>
+
+    </form>
+
+    <button onclick="aggiungi()">Aggiungi</button>
+    <button onclick="eliminaUltima()">Elimina ultima riga</button>
+    <button onclick="aggiornaTabella()">Mostra tabella completa</button>
+
+    <h3>Tabella:</h3>
+    <div id="risultato"></div>
+
+</body>
+
+</html>
