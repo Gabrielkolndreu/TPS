@@ -52,7 +52,7 @@
     </div>
 
     <script type="text/javascript">
-    
+    //<![CDATA[
 
     var url = "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json";
 
@@ -78,6 +78,7 @@
 
                     var chiavi = Object.keys(data[0]);
 
+                    // Creazione intestazioni
                     chiavi.forEach(function (chiave) {
 
                         var th = document.createElement("th");
