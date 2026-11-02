@@ -1,83 +1,145 @@
 
-<!DOCTYPE html>
-<html lang="it">
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC
+ "-//W3C//DTD XHTML 1.0 Strict//EN"
+ "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" lang="it" xml:lang="it">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type"
+          content="application/xhtml+xml; charset=UTF-8" />
+
     <title>Andamento COVID-19 Italia</title>
-    <style>
+
+    <style type="text/css">
         table {
             border-collapse: collapse;
             width: 100%;
             font-size: 12px;
         }
+
         th, td {
             border: 1px solid #ccc;
             padding: 6px;
             text-align: center;
         }
+
         th {
             background-color: #ddd;
         }
+
         tr:nth-child(even) {
             background-color: #f2f2f2;
         }
+
         .table-container {
             overflow-x: auto;
         }
     </style>
 </head>
+
 <body>
 
-<h2>Andamento nazionale COVID-19</h2>
+    <h2>Andamento nazionale COVID-19</h2>
 
-<div class="table-container">
-    <table id="tabella"></table>
-</div>
+    <div class="table-container">
+        <table id="tabella">
+            <thead>
+                <tr id="intestazione"></tr>
+            </thead>
+            <tbody id="corpo-tabella"></tbody>
+        </table>
+    </div>
 
-<script>
-const url = "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json";
+    <script type="text/javascript">
+    
 
-fetch(url)
-    .then(response => response.json())
-    .then(data => {
+    var url = "https://raw.githubusercontent.com/pcm-dpc/COVID-19/master/dati-json/dpc-covid19-ita-andamento-nazionale.json";
 
-        const tabella = document.getElementById("tabella");
+    var richiesta = new XMLHttpRequest();
 
-        const chiavi = Object.keys(data[0]);
+    richiesta.open("GET", url, true);
 
-        const thead = document.createElement("thead");
-        const rigaIntestazione = document.createElement("tr");
+    richiesta.onreadystatechange = function () {
 
-        chiavi.forEach(chiave => {
-            const th = document.createElement("th");
-            th.textContent = chiave;
-            rigaIntestazione.appendChild(th);
-        });
+        if (richiesta.readyState === 4) {
 
-        thead.appendChild(rigaIntestazione);
-        tabella.appendChild(thead);
+            if (richiesta.status === 200) {
 
-        const tbody = document.createElement("tbody");
+                var data = JSON.parse(richiesta.responseText);
 
-        data.forEach(record => {
-            const tr = document.createElement("tr");
+                var intestazione =
+                    document.getElementById("intestazione");
 
-            chiavi.forEach(chiave => {
-                const td = document.createElement("td");
-                td.textContent = record[chiave] ?? "";
-                tr.appendChild(td);
-            });
+                var corpo =
+                    document.getElementById("corpo-tabella");
 
-            tbody.appendChild(tr);
-        });
+                if (data.length > 0) {
 
-        tabella.appendChild(tbody);
+                    var chiavi = Object.keys(data[0]);
 
-    })
-    .catch(error => {
-        console.error("Errore nel caricamento JSON:", error);
-    });
-</script>
+                    chiavi.forEach(function (chiave) {
+
+                        var th = document.createElement("th");
+
+                        th.appendChild(
+                            document.createTextNode(chiave)
+                        );
+
+                        intestazione.appendChild(th);
+
+                    });
+
+                    data.forEach(function (record) {
+
+                        var tr = document.createElement("tr");
+
+                        chiavi.forEach(function (chiave) {
+
+                            var td = document.createElement("td");
+
+                            var valore = record[chiave];
+
+                            td.appendChild(
+                                document.createTextNode(
+                                    valore === null ||
+                                    valore === undefined
+                                    ? ""
+                                    : valore
+                                )
+                            );
+
+                            tr.appendChild(td);
+
+                        });
+
+                        corpo.appendChild(tr);
+
+                    });
+
+                }
+
+            } else {
+
+                console.error(
+                    "Errore HTTP: " + richiesta.status
+                );
+
+            }
+
+        }
+
+    };
+
+    richiesta.onerror = function () {
+        console.error("Errore nella richiesta HTTP.");
+    };
+
+    richiesta.send();
+
+    //]]>
+
+    </script>
 
 </body>
 </html>
